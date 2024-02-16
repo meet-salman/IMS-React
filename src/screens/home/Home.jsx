@@ -30,7 +30,7 @@ const Home = () => {
           <CourseCard />
           <CourseCard />
         </Box>
-        
+
       </Box>
     </>
   )
