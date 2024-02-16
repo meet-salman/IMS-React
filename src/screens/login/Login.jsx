@@ -134,7 +134,7 @@ export default function SignIn() {
 
         </Box>
 
-        {/* BackDrop */}
+        {/* Backdrop */}
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}  >
           <CircularProgress color="inherit" />
         </Backdrop>
