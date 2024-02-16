@@ -40,6 +40,7 @@ const HeroSection = () => {
 
         <Typography sx={{ marginTop: '15px', marginBottom: '30px', color: '#4c5967' }}> Explore our cutting-edge dashboard, delivering high-quality solutions tailored to your needs. <br /> Elevate your experience with top-tier features and services. </Typography>
         <Button onClick={navigateToSignUp} variant="contained"> Regiter Now </Button>
+        
       </Box>
     </>
   )
