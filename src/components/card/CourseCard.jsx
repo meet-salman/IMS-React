@@ -10,6 +10,7 @@ import StarRating from '../../components/rating/Rating';
 export default function CourseCard() {
     return (
         <Card sx={{ width: 280 }}>
+
             <CardMedia
                 sx={{ height: 200 }}
                 image="https://emarsys.com/app/uploads/2020/03/real-ai.jpg"
@@ -31,9 +32,11 @@ export default function CourseCard() {
                 </Typography>
 
             </CardContent>
+            
             <CardActions>
                 <Button size="small">Learn More</Button>
             </CardActions>
+
         </Card>
     );
 }
