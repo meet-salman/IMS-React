@@ -11,11 +11,13 @@ const RouterConfig = () => {
     <>
       <BrowserRouter>
         <ResponsiveAppBar />
+
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='login' element={<Login />} />
           <Route path='Register' element={<Register />} />
         </Routes>
+
         <Copyright />
       </BrowserRouter>
     </>
