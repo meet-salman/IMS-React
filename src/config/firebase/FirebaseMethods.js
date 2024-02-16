@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, } from "firebase/auth";
 import app from "./FirebaseConfig";
 import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, } from "firebase/firestore";
 // import { useNavigate } from "react-router-dom";
@@ -7,6 +7,42 @@ const auth = getAuth(app);
 
 //initialize firestore database
 const db = getFirestore(app);
+
+
+
+// On Auth State Change
+let userExist = () => {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                resolve(user)
+            } else {
+                // reject('Error')
+            }
+        });
+
+    })
+}
+
+
+// Get User Data
+let getUserData = () => {
+    return new Promise((resolve, reject) => {
+        userExist()
+            .then((res) => {
+                getData('students')
+                    .then((res) => {
+                        resolve(res)
+                    })
+                    .catch((rej) => {
+                        reject(rej)
+                    })
+            })
+            .catch((rej) => {
+                reject(rej)
+            })
+    })
+}
 
 
 // register user
@@ -78,15 +114,15 @@ const sendData = (obj, colName) => {
 //get data with id from firestore
 const getData = (colName) => {
     return new Promise(async (resolve, reject) => {
-        const dataArr = []
+        // const dataArr = []
         const q = query(
             collection(db, colName),
             where("id", "==", auth.currentUser.uid)
         );
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-            dataArr.push(doc.data())
-            resolve(dataArr);
+            // dataArr.push(doc.data())
+            resolve(doc.data());
         });
         reject("error occured");
     });
@@ -126,4 +162,4 @@ const updateDocument = async (obj, id, name) => {
 }
 
 
-export { auth, db, signUpUser, loginUser, signOutUser, sendData, getData, getAllData, deleteDocument, updateDocument };
+export { auth, db, userExist, signUpUser, loginUser, signOutUser, getUserData, sendData, getData, getAllData, deleteDocument, updateDocument };

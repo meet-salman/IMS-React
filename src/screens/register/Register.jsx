@@ -72,10 +72,10 @@ export default function SignUp() {
       name: data.get('firstName') + ' ' + data.get('lastName'),
       email: data.get('email'),
       password: data.get('password'),
-      enrollDate: formattedDate
+      enrollDate: formattedDate,
+      type: 'student'
     })
       .then((res) => {
-        console.log(res);
         loaderClose()
 
         setAlertType('success')
