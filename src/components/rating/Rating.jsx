@@ -36,6 +36,7 @@ export default function StarRating({ rating }) {
                 emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
             <Box sx={{ ml: 2 }}>{labels[value]}</Box>
+            
         </Box>
     );
 }
