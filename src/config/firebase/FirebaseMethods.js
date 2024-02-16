@@ -18,7 +18,6 @@ let signUpUser = (obj) => {
                 await addDoc(collection(db, "students"), obj)
                     .then((res) => {
                         console.log("user added to database successfully");
-                        // window.location = '/'
                     })
                     .catch((err) => {
                         console.log(err);
