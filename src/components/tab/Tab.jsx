@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CourseCard from '../card/CourseCard';
 import StudentsTable from '../table/StudentsTable';
+import CourseForm from '../courseForm/CourseForm';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -65,7 +66,7 @@ export default function BasicTabs() {
                 <CourseCard />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                Item Three
+                <CourseForm/>
             </CustomTabPanel>
 
         </Box>
