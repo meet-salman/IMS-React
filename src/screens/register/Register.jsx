@@ -71,6 +71,7 @@ export default function SignUp() {
     signUpUser({
       name: data.get('firstName') + ' ' + data.get('lastName'),
       email: data.get('email'),
+      phone: data.get('phone'),
       password: data.get('password'),
       enrollDate: formattedDate,
       type: 'student'
@@ -123,6 +124,10 @@ export default function SignUp() {
 
               <Grid item xs={12}>
                 <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField required fullWidth id="phone" label="Phone No" name="phone" autoComplete="phone" />
               </Grid>
 
               <Grid item xs={12}>

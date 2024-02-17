@@ -1,26 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import HeroSection from '../../components/hero-section/HeroSection'
 import CourseCard from '../../components/card/CourseCard'
 import { Box, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { getData, getUserData, userExist } from '../../config/firebase/FirebaseMethods'
 
 const Home = () => {
 
-  const [currentUser, setCurrentUser] = useState();
-
-
-  useEffect(() => {
-
-    getUserData()
-      .then((res) => {
-        // console.log(res);
-      })
-      .catch((rej) => {
-        console.log(rej);
-      })
-
-  }, [])
 
   return (
     <>
