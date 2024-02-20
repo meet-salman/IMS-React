@@ -9,7 +9,7 @@ import StarRating from '../../components/rating/Rating';
 
 export default function CourseCard(props) {
 
-    const { title, description, trainer, showButon } = props
+    const { title, description, trainer, showButon, id } = props
 
 
     return (
@@ -40,7 +40,7 @@ export default function CourseCard(props) {
 
             {showButon ?
                 < CardActions >
-                    <Button size="small">Learn More</Button>
+                    <Button size="small"> View Course </Button>
                 </CardActions>
                 :
                 < CardActions > </CardActions>

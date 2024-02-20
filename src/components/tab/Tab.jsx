@@ -9,7 +9,6 @@ import StudentsTable from '../table/StudentsTable';
 import CourseForm from '../courseForm/CourseForm';
 import { getAllData } from '../../config/firebase/FirebaseMethods';
 import { useEffect } from 'react';
-import { TableCell, TableHead, TableRow } from '@mui/material';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -79,11 +78,12 @@ export default function BasicTabs() {
                 </Tabs>
             </Box>
 
-
+            {/* All Students Tab */}
             <CustomTabPanel value={value} index={0}>
                 < StudentsTable />
             </CustomTabPanel>
 
+            {/* All Courses Tab */}
             <CustomTabPanel value={value} index={1}>
 
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
@@ -91,12 +91,11 @@ export default function BasicTabs() {
                         allCourses.map((item) => {
                             return <CourseCard title={item.courseName} description={item.courseDescription} trainer={item.instructorName} showButon={false} />
                         })
-
-
                         : <Typography variant='h5' sx={{ fontFamily: '"Inter", sans-serif', textAlign: 'center', color: 'grey' }}> Loading... </Typography>}
                 </Box>
             </CustomTabPanel>
 
+            {/* Courses Add Form */}
             <CustomTabPanel value={value} index={2}>
                 <CourseForm />
             </CustomTabPanel>
