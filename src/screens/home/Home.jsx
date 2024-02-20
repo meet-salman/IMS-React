@@ -13,8 +13,8 @@ const Home = () => {
       {/* Top Rated Courses */}
       {/* <Box sx={{ paddingX: { xs: '50px', lg: '100px' }, paddingBottom: { xs: '50px', lg: '100px' } }}> */}
 
-        {/* Heading */}
-        {/* <Typography variant='h2'
+      {/* Heading */}
+      {/* <Typography variant='h2'
           sx={{
             marginBottom: '50px',
             fontFamily: '"Inter", sans-serif',
@@ -25,8 +25,8 @@ const Home = () => {
           Top Rated Courses
         </Typography> */}
 
-        {/* Courses Cards */}
-        {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+      {/* Courses Cards */}
+      {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
           <CourseCard />
           <CourseCard />
           <CourseCard />
@@ -34,7 +34,7 @@ const Home = () => {
         </Box> */}
 
       {/* </Box> */}
-      
+
     </>
   )
 }

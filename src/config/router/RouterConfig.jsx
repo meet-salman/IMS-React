@@ -7,6 +7,7 @@ import Register from '../../screens/register/Register'
 import ResponsiveAppBar from '../../components/navbar/Navbar'
 import Copyright from '../../components/footer/Footer'
 import StudentDashboard from '../../screens/dashboard/StudentDashboard'
+import Courses from '../../screens/courses/Courses'
 
 const RouterConfig = () => {
   return (
@@ -20,6 +21,7 @@ const RouterConfig = () => {
           <Route path='Register' element={<Register />} />
           <Route path='admin' element={<AdminDashboard />} />
           <Route path='student' element={<StudentDashboard />} />
+          <Route path='courses' element={<Courses />} />
         </Routes>
 
         <Copyright />

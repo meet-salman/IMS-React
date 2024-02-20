@@ -47,7 +47,6 @@ function a11yProps(index) {
 export default function BasicTabs() {
     const [value, setValue] = React.useState(0);
     const [allCourses, setAllCourses] = React.useState([])
-    const [allStudents, setAllStudents] = React.useState([]);
 
 
     const handleChange = (event, newValue) => {
@@ -90,7 +89,7 @@ export default function BasicTabs() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
                     {allCourses.length > 0 ?
                         allCourses.map((item) => {
-                            return <CourseCard title={item.courseName} description={item.courseDescription} trainer={item.instructorName} />
+                            return <CourseCard title={item.courseName} description={item.courseDescription} trainer={item.instructorName} showButon={false} />
                         })
 
 

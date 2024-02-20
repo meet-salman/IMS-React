@@ -16,7 +16,7 @@ import { Avatar } from '@mui/material';
 
 
 
-const pages = ['home', 'courses', 'contact'];
+const pages = ['home', 'courses'];
 let settings = [];
 
 
