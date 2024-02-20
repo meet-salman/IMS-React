@@ -11,10 +11,10 @@ const Home = () => {
       <HeroSection />
 
       {/* Top Rated Courses */}
-      <Box sx={{ paddingX: { xs: '50px', lg: '100px' }, paddingBottom: { xs: '50px', lg: '100px' } }}>
+      {/* <Box sx={{ paddingX: { xs: '50px', lg: '100px' }, paddingBottom: { xs: '50px', lg: '100px' } }}> */}
 
         {/* Heading */}
-        <Typography variant='h2'
+        {/* <Typography variant='h2'
           sx={{
             marginBottom: '50px',
             fontFamily: '"Inter", sans-serif',
@@ -23,17 +23,18 @@ const Home = () => {
             textAlign: 'center',
           }}>
           Top Rated Courses
-        </Typography>
+        </Typography> */}
 
         {/* Courses Cards */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+        {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
           <CourseCard />
           <CourseCard />
           <CourseCard />
           <CourseCard />
-        </Box>
+        </Box> */}
 
-      </Box>
+      {/* </Box> */}
+      
     </>
   )
 }

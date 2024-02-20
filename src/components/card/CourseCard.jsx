@@ -7,7 +7,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import StarRating from '../../components/rating/Rating';
 
-export default function CourseCard() {
+export default function CourseCard(props) {
+
+    const { title, description, trainer } = props
+
     return (
         <Card sx={{ width: 280 }}>
 
@@ -17,8 +20,9 @@ export default function CourseCard() {
                 title="green iguana"
             />
             <CardContent>
-                <Typography gutterBottom variant="h6" component="div"> AI, Machine Learning </Typography>
-                <Typography variant="body2" color="text.secondary"> Dr. Angela Yu </Typography>
+                <Typography variant="h6" component="div"> {title.slice(0, 20)}... </Typography>
+                <Typography gutterBottom variant="body1" color="text.secondary"> {description.slice(0, 30)}... </Typography>
+                <Typography variant="body2" color="text.secondary"> <b>Trainer:</b> {trainer} </Typography>
                 <Typography variant="subtitle1"
                     sx={{
                         display: 'flex',
@@ -32,7 +36,7 @@ export default function CourseCard() {
                 </Typography>
 
             </CardContent>
-            
+
             <CardActions>
                 <Button size="small">Learn More</Button>
             </CardActions>

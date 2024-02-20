@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Paper, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { getAllData } from '../../config/firebase/FirebaseMethods';
@@ -41,17 +41,16 @@ export default function BasicTable() {
         setStatus('No Students...')
       })
 
-
-
   }, [])
 
 
 
   return (
+
     <Box>
       {studentsData.length > 0 ?
 
-        <TableContainer>
+        <TableContainer component={Paper}>
 
           {/* Students Table */}
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

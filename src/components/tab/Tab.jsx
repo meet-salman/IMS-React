@@ -7,6 +7,9 @@ import Box from '@mui/material/Box';
 import CourseCard from '../card/CourseCard';
 import StudentsTable from '../table/StudentsTable';
 import CourseForm from '../courseForm/CourseForm';
+import { getAllData } from '../../config/firebase/FirebaseMethods';
+import { useEffect } from 'react';
+import { TableCell, TableHead, TableRow } from '@mui/material';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -43,15 +46,34 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
     const [value, setValue] = React.useState(0);
+    const [allCourses, setAllCourses] = React.useState([])
+    const [allStudents, setAllStudents] = React.useState([]);
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    useEffect(() => {
+
+        getAllData('Courses')
+            .then((res) => {
+                setAllCourses(res)
+            })
+            .catch((rej) => {
+                console.log(rej);
+            })
+
+    }, [])
+
+
+
+
     return (
+
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tabs value={value} onChange={handleChange}>
                     <Tab label="All Students" {...a11yProps(0)} />
                     <Tab label="All Courses" {...a11yProps(1)} />
                     <Tab label="Add Course" {...a11yProps(2)} />
@@ -60,13 +82,24 @@ export default function BasicTabs() {
 
 
             <CustomTabPanel value={value} index={0}>
-                <StudentsTable />
+                < StudentsTable />
             </CustomTabPanel>
+
             <CustomTabPanel value={value} index={1}>
-                <CourseCard />
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+                    {allCourses.length > 0 ?
+                        allCourses.map((item) => {
+                            return <CourseCard title={item.courseName} description={item.courseDescription} trainer={item.instructorName} />
+                        })
+
+
+                        : <Typography variant='h5' sx={{ fontFamily: '"Inter", sans-serif', textAlign: 'center', color: 'grey' }}> Loading... </Typography>}
+                </Box>
             </CustomTabPanel>
+
             <CustomTabPanel value={value} index={2}>
-                <CourseForm/>
+                <CourseForm />
             </CustomTabPanel>
 
         </Box>

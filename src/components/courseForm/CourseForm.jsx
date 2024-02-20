@@ -1,5 +1,5 @@
 import { Alert, Backdrop, Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, TextField, TextareaAutosize } from '@mui/material'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { sendData } from '../../config/firebase/FirebaseMethods';
 
 const CourseForm = () => {
@@ -43,10 +43,11 @@ const CourseForm = () => {
     };
 
 
+    const emptyField = useRef();
     const addCourse = (event) => {
         event.preventDefault();
         loaderShow()
-        const data = new FormData(event.currentTarget);
+        let data = new FormData(event.currentTarget);
 
         sendData({
             courseName: data.get('courseName'),
@@ -56,8 +57,6 @@ const CourseForm = () => {
         }, 'Courses')
             .then((res) => {
                 loaderClose()
-
-
 
                 setAlertType('success')
                 setAlertMsg('Course Added Successfully')
@@ -70,6 +69,7 @@ const CourseForm = () => {
                 setAlertMsg(`${rej}`)
                 alertShow({ vertical: 'top', horizontal: 'right' })
             })
+
     }
 
 
@@ -107,6 +107,7 @@ const CourseForm = () => {
                                         label="Course Duration"
                                         fullWidth
                                         onChange={handleChange}
+                                        ref={emptyField}
                                     >
                                         <MenuItem value={'03 Months'}> 03 Months </MenuItem>
                                         <MenuItem value={'06 Months'}> 06 Months </MenuItem>
