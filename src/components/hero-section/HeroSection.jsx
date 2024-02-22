@@ -1,8 +1,11 @@
 import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import UserContext from '../../context/UserContext';
 
 const HeroSection = () => {
+
+  const { isUser } = React.useContext(UserContext);
 
   // UseNavigate
   const navigate = useNavigate()
@@ -10,6 +13,10 @@ const HeroSection = () => {
   // Navigate to SignUp
   const navigateToSignUp = () => {
     navigate('/register')
+  }
+  // Navigate to SignUp
+  const navigateToCourses = () => {
+    navigate('/courses')
   }
 
   return (
@@ -40,7 +47,13 @@ const HeroSection = () => {
         </Typography>
 
         <Typography sx={{ marginTop: '15px', marginBottom: '30px', color: '#4c5967' }}> Explore our cutting-edge dashboard, delivering high-quality solutions tailored to your needs. <br /> Elevate your experience with top-tier features and services. </Typography>
-        <Button onClick={navigateToSignUp} variant="contained"> Regiter Now </Button>
+        {isUser
+          ?
+          <Button onClick={navigateToCourses} variant="contained"> Start Learning </Button>
+          :
+          <Button onClick={navigateToSignUp} variant="contained"> Regiter Now </Button>
+        }
+
 
       </Box>
     </>
