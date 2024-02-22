@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import UserContext from './UserContext'
-import { getUserData, userExist } from '../config/firebase/FirebaseMethods';
+import { getAllData, getUserData, userExist } from '../config/firebase/FirebaseMethods';
 
 const UserContextProvider = ({ children }) => {
 
     const [isUser, setIsUser] = useState(false);
     const [currentUser, setCurrentUser] = useState();
+    const [allStudents, setAllStudents] = useState();
 
     // UseEffect to set Global States
     useEffect(() => {
@@ -28,11 +29,27 @@ const UserContextProvider = ({ children }) => {
             .catch((rej) => {
                 // User Not LoggedIn
             })
+
+        // Getting Students Data
+        getAllData('students')
+            .then((res) => {
+                let arr = [];
+                res.map((item) => {
+                    if (item.type === 'student') {
+                        arr.push(item)
+                    }
+                })
+                setAllStudents(arr)
+            })
+            .catch((rej) => {
+                console.log(rej);
+            })
+
     }, [])
 
     return (
         <>
-            <UserContext.Provider value={{ isUser, setIsUser, currentUser, setCurrentUser }}>
+            <UserContext.Provider value={{ isUser, setIsUser, currentUser, setCurrentUser, allStudents, setAllStudents }}>
                 {children}
             </UserContext.Provider>
         </>
