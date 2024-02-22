@@ -13,18 +13,19 @@ import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import { getUserData, signOutUser } from '../../config/firebase/FirebaseMethods';
 import { Avatar } from '@mui/material';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import userContext from '../../context/UserContext'
 
 
 const pages = ['home', 'courses'];
 let settings = [];
 
-
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const [currentUser, setCurrentUser] = React.useState();
+  const { isUser, setIsUser } = React.useContext(userContext);
+  const [userData, setUserData] = React.useState();
 
   // UseNavigate
   const navigate = useNavigate()
@@ -39,12 +40,13 @@ function ResponsiveAppBar() {
     navigate('/login')
   }
 
+
   // UseEffect to get User Data
   React.useEffect(() => {
 
     getUserData()
       .then((res) => {
-        setCurrentUser(res)
+        setUserData(res)
 
         res.type === 'admin' ? settings = ['Dashboard', 'Logout'] : settings = ['Profile', 'Logout']
 
@@ -53,13 +55,13 @@ function ResponsiveAppBar() {
         console.log(rej);
       })
 
-  }, [])
+  }, [userData])
 
 
+  // Handle NavBar Menues
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-
   const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
 
@@ -70,7 +72,6 @@ function ResponsiveAppBar() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
 
@@ -80,6 +81,7 @@ function ResponsiveAppBar() {
       navigate('/student')
     } else if (setting === 'Logout') {
       signOutUser()
+      setIsUser(false)
       setCurrentUser()
     }
 
@@ -182,15 +184,17 @@ function ResponsiveAppBar() {
 
 
           {/* User Menue */}
-          {currentUser
+          {isUser
             ?
-            <Box sx={{ flexGrow: 0 }}>
+            < Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                  <AccountCircleIcon fontSize='large' sx={{color:'#ffff'}}/>
                 </IconButton>
               </Tooltip>
               <Menu
+
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
@@ -221,11 +225,9 @@ function ResponsiveAppBar() {
             </Box>
           }
 
-
-
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar >
   );
 }
 export default ResponsiveAppBar;

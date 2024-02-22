@@ -14,11 +14,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Backdrop, CircularProgress, Snackbar } from '@mui/material';
 import { loginUser } from '../../config/firebase/FirebaseMethods';
+import UserContext from '../../context/UserContext';
 
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+
+  const { isUser, setIsUser } = React.useContext(UserContext)
 
   const [loader, setLoderOpen] = React.useState(false);
   const [alert, setAlertOpen] = React.useState({
@@ -75,6 +78,7 @@ export default function SignIn() {
         console.log(res);
         loaderClose()
 
+        setIsUser(true)
         setAlertType('success')
         setAlertMsg('Login Successfully')
         alertShow({ vertical: 'top', horizontal: 'right' })
