@@ -78,7 +78,7 @@ function ResponsiveAppBar() {
     if (setting === 'Dashboard') {
       navigate('/admin')
     } else if (setting === 'Profile') {
-      navigate('/student')
+      navigate('/profile')
     } else if (setting === 'Logout') {
       signOutUser()
       setIsUser(false)
