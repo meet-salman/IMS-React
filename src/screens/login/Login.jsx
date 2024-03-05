@@ -66,7 +66,7 @@ export default function SignIn() {
   // User Login Function
   const UserLogin = (event) => {
     event.preventDefault();
-    loaderShow()
+    loaderShow();
     const data = new FormData(event.currentTarget);
 
     // Login User From Firebase
@@ -76,21 +76,21 @@ export default function SignIn() {
     })
       .then((res) => {
         console.log(res);
-        loaderClose()
+        loaderClose();
 
-        setIsUser(true)
-        setAlertType('success')
-        setAlertMsg('Login Successfully')
-        alertShow({ vertical: 'top', horizontal: 'right' })
-        navigate('/')
+        setIsUser(true);
+        setAlertType('success');
+        setAlertMsg('Login Successfully');
+        alertShow({ vertical: 'top', horizontal: 'right' });
+        navigate('/');
       })
       .catch((rej) => {
         console.log(rej);
-        loaderClose()
+        loaderClose();
 
-        setAlertType('error')
-        setAlertMsg(`${rej}`)
-        alertShow({ vertical: 'top', horizontal: 'right' })
+        setAlertType('error');
+        setAlertMsg(`${rej}`);
+        alertShow({ vertical: 'top', horizontal: 'right' });
       })
   };
 
