@@ -1,18 +1,9 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { signUpUser } from '../../config/firebase/FirebaseMethods';
-import { Snackbar, Alert, Backdrop, CircularProgress, InputLabel, MenuItem, FormControl } from '@mui/material';
-import Select from '@mui/material/Select';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box, Container, Grid, Button, Typography, CssBaseline, Avatar, Snackbar, Alert, Backdrop, CircularProgress, TextField, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 
 
 const defaultTheme = createTheme();
@@ -65,7 +56,7 @@ export default function SignUp() {
   };
 
 
-  // Setting Course Value
+  // Setting Course Name
   const handleChange = (event) => {
     setCourse(event.target.value);
   };

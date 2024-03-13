@@ -1,5 +1,5 @@
-import { Alert, Backdrop, Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, TextField, TextareaAutosize } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React from 'react'
+import { Alert, Backdrop, Box, Button, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, TextField } from '@mui/material'
 import { sendData } from '../../config/firebase/FirebaseMethods';
 
 const CourseForm = () => {
