@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Alert, Backdrop, Box, Button, CircularProgress, Paper, Snackbar, Typography } from '@mui/material';
+import { Alert, Backdrop, Box, Button, CircularProgress, Grid, Paper, Snackbar, TextField, Typography } from '@mui/material';
 import UserContext from '../../context/UserContext'
 import { deleteDocument } from '../../config/firebase/FirebaseMethods';
 
@@ -22,6 +22,7 @@ export default function BasicTable() {
 
   const { allStudents, setAllStudents } = React.useContext(UserContext);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const [loader, setLoderOpen] = React.useState(false);
   const [alert, setAlertOpen] = React.useState({
     open: false,
@@ -34,6 +35,13 @@ export default function BasicTable() {
 
   const [id, setID] = React.useState();
   const [idx, setIdx] = React.useState();
+
+
+  // UseRefs
+  const editedName = React.useRef();
+  const editedEmail = React.useRef();
+  const editedPhone = React.useRef();
+
 
 
   // BackDrop Open & CLose Function
@@ -55,10 +63,23 @@ export default function BasicTable() {
     setAlertOpen({ ...alert, open: false });
   };
 
-  const editUser = (id) => {
-    console.log(id);
-    setDialogOpen(true)
+
+
+
+  const editStudentDialog = (id, index) => {
+    editedName.current.value = allStudents[idx].name;
+
+    setEditDialogOpen(true);
+    setID(id);
+    setIdx(index);
+
   }
+
+  const editStudent = () => {
+    console.log(id, idx);
+
+  }
+
 
 
   // Open Dialog Box to confirmation for Delete Student
@@ -132,7 +153,7 @@ export default function BasicTable() {
                   <TableCell >{student.enrollDate}</TableCell>
                   <TableCell align="right">
                     <Box>
-                      <Button size="small" onClick={() => editUser(student.documentId, index)}> Edit </Button>
+                      <Button size="small" onClick={() => editStudentDialog(student.documentId, index)}> Edit </Button>
                       <Button size="small" onClick={() => deleteStudentDialog(student.documentId, index)}> Delete </Button>
                     </Box>
                   </TableCell>
@@ -152,7 +173,7 @@ export default function BasicTable() {
 
 
 
-
+      {/* Is User Delete Dialog */}
       <Dialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
@@ -172,6 +193,53 @@ export default function BasicTable() {
           <Button onClick={() => DeleteUser()} autoFocus> Delete </Button>
         </DialogActions>
       </Dialog>
+
+
+
+      <Dialog
+        spacing={2}
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Edit Student"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Enter edited information to Update the student.
+
+
+            {/* register Form */}
+            <Box component="form" sx={{ mt: 3 }}>
+
+              {/* Form Fields */}
+              <Grid container spacing={2}>
+
+                <Grid item xs={12}>
+                  <TextField autoComplete="given-name" fullWidth name="Name" required label="Full Name" ref={editedName} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" ref={editedEmail} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField required fullWidth id="phone" label="Phone No" name="phone" autoComplete="phone" ref={editedPhone} />
+                </Grid>
+
+              </Grid>
+
+            </Box>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}> Cancel </Button>
+          <Button onClick={() => editStudent()} variant="contained" autoFocus> Update </Button>
+        </DialogActions>
+      </Dialog>
+
 
 
 

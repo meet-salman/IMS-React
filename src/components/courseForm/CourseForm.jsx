@@ -4,7 +4,7 @@ import { sendData } from '../../config/firebase/FirebaseMethods';
 
 const CourseForm = () => {
 
-    const [courseduration, setCourseDuration] = React.useState('');
+    const [courseDuration, setCourseDuration] = React.useState();
 
     const [loader, setLoderOpen] = React.useState(false);
     const [alert, setAlertOpen] = React.useState({
@@ -38,21 +38,19 @@ const CourseForm = () => {
     };
 
 
+    // Setting Course Duration
     const handleChange = (event) => {
         setCourseDuration(event.target.value);
     };
-
-
-    const emptyField = useRef();
     const addCourse = (event) => {
         event.preventDefault();
-        loaderShow()
+        loaderShow();
         let data = new FormData(event.currentTarget);
 
         sendData({
             courseName: data.get('courseName'),
             courseDescription: data.get('courseDescription'),
-            courseDuration: courseduration,
+            courseDuration: courseDuration,
             instructorName: data.get('instructorName')
         }, 'Courses')
             .then((res) => {
@@ -101,13 +99,11 @@ const CourseForm = () => {
                                 <FormControl fullWidth required>
                                     <InputLabel > Course Duration </InputLabel>
                                     <Select
-                                        labelId="course-duration"
-                                        id="course-duration"
-                                        value={courseduration}
+                                        name='courseDuration'
                                         label="Course Duration"
-                                        fullWidth
+                                        value={courseDuration}
                                         onChange={handleChange}
-                                        ref={emptyField}
+                                        fullWidth
                                     >
                                         <MenuItem value={'03 Months'}> 03 Months </MenuItem>
                                         <MenuItem value={'06 Months'}> 06 Months </MenuItem>

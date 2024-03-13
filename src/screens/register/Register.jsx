@@ -11,7 +11,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { signUpUser } from '../../config/firebase/FirebaseMethods';
-import { Alert, Backdrop, CircularProgress, Snackbar } from '@mui/material';
+import { Snackbar, Alert, Backdrop, CircularProgress, InputLabel, MenuItem, FormControl } from '@mui/material';
+import Select from '@mui/material/Select';
 
 
 const defaultTheme = createTheme();
@@ -20,7 +21,9 @@ export default function SignUp() {
 
   const date = new Date();
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-  const formattedDate = date.toLocaleDateString('en-US', options);
+  const formattedDate = date.toLocaleDateString('en-PK', options);
+
+  const [course, setCourse] = React.useState('');
 
   const [loader, setLoderOpen] = React.useState(false);
   const [alert, setAlertOpen] = React.useState({
@@ -61,6 +64,12 @@ export default function SignUp() {
     setAlertOpen({ ...alert, open: false });
   };
 
+
+  // Setting Course Value
+  const handleChange = (event) => {
+    setCourse(event.target.value);
+  };
+
   // User Register Function
   const UserRegister = (event) => {
     event.preventDefault();
@@ -69,9 +78,11 @@ export default function SignUp() {
 
     // User Register to Firebase
     signUpUser({
-      name: data.get('firstName') + ' ' + data.get('lastName'),
+      name: data.get('fullName'),
       email: data.get('email'),
       phone: data.get('phone'),
+      age: data.get('age'),
+      course: course,
       password: data.get('password'),
       enrollDate: formattedDate,
       type: 'student'
@@ -92,12 +103,13 @@ export default function SignUp() {
         setAlertMsg(`${rej}`)
         alertShow({ vertical: 'top', horizontal: 'right' })
       })
+
   };
 
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm">
         <CssBaseline />
 
         {/* Form Area */}
@@ -114,20 +126,42 @@ export default function SignUp() {
             <Grid container spacing={2}>
 
               <Grid item xs={12} sm={6}>
-                <TextField autoComplete="given-name" fullWidth name="firstName" required label="First Name" autoFocus
-                />
+                <TextField fullWidth name="fullName" required label="Full Name" autoFocus />
               </Grid>
+
+              {/* <Grid item xs={12} sm={6}>
+                <TextField label="Last Name" fullWidth name="lastName" autoComplete="family-name" />
+              </Grid> */}
 
               <Grid item xs={12} sm={6}>
-                <TextField label="Last Name" fullWidth name="lastName" autoComplete="family-name" />
-              </Grid>
-
-              <Grid item xs={12}>
                 <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField required fullWidth id="phone" label="Phone No" name="phone" autoComplete="phone" />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField required fullWidth id="age" label="Age" name="age" />
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl fullWidth required>
+                  <InputLabel > Select Course </InputLabel>
+                  <Select
+                    label="Select Course"
+                    name='course'
+                    value={course}
+                    onChange={handleChange}
+                    fullWidth
+                  >
+                    <MenuItem value={'Web Development'}> Web Development </MenuItem>
+                    <MenuItem value={'App Development'}> App Development </MenuItem>
+                    <MenuItem value={'Digital Marketing'}> Digital Marketing </MenuItem>
+                    <MenuItem value={'Graphic Designing'}> Graphic Designing </MenuItem>
+                    <MenuItem value={'Video Editing'}> Video Editing </MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
 
               <Grid item xs={12}>
