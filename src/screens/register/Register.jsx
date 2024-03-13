@@ -143,7 +143,7 @@ export default function SignUp() {
                     label="Select Course"
                     name='course'
                     value={course}
-                    onChange={handleChange}
+                    onChange={(event) => setCourse(event.target.value)}
                     fullWidth
                   >
                     <MenuItem value={'Web Development'}> Web Development </MenuItem>
