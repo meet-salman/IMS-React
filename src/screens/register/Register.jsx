@@ -69,7 +69,7 @@ export default function SignUp() {
 
     // User Register to Firebase
     signUpUser({
-      name: data.get('fullName'),
+      name: data.get('name'),
       email: data.get('email'),
       phone: data.get('phone'),
       age: data.get('age'),
@@ -79,20 +79,20 @@ export default function SignUp() {
       type: 'student'
     })
       .then((res) => {
-        loaderClose()
+        loaderClose();
 
-        setAlertType('success')
-        setAlertMsg('SignUp Successfully')
-        alertShow({ vertical: 'top', horizontal: 'right' })
+        setAlertType('success');
+        setAlertMsg('SignUp Successfully');
+        alertShow({ vertical: 'top', horizontal: 'right' });
         navigate('/')
       })
       .catch((rej) => {
         console.log(rej);
-        loaderClose()
+        loaderClose();
 
-        setAlertType('error')
-        setAlertMsg(`${rej}`)
-        alertShow({ vertical: 'top', horizontal: 'right' })
+        setAlertType('error');
+        setAlertMsg(`${rej}`);
+        alertShow({ vertical: 'top', horizontal: 'right' });
       })
 
   };
@@ -117,7 +117,7 @@ export default function SignUp() {
             <Grid container spacing={2}>
 
               <Grid item xs={12} sm={6}>
-                <TextField fullWidth name="fullName" required label="Full Name" autoFocus />
+                <TextField fullWidth name="name" required label="Full Name" autoFocus />
               </Grid>
 
               {/* <Grid item xs={12} sm={6}>
