@@ -74,6 +74,7 @@ export default function BasicTable() {
   const editStudent = (event) => {
     event.preventDefault();
 
+    setEditDialogOpen(false);
     loaderShow();
 
     const data = new FormData(event.currentTarget);
@@ -86,7 +87,6 @@ export default function BasicTable() {
     }, id, 'students')
       .then((res) => {
         loaderClose();
-        setEditDialogOpen(false)
 
         setAlertType('success');
         setAlertMsg('Student Data Updated Successfully');
@@ -103,7 +103,7 @@ export default function BasicTable() {
   }
 
 
-  
+
   // Open Dialog Box to confirmation for Delete Student
   const deleteStudentDialog = (id, index) => {
 
