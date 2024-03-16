@@ -88,6 +88,13 @@ export default function BasicTable() {
       .then((res) => {
         loaderClose();
 
+        allStudents[index].name = data.get('name');
+        allStudents[index].email = data.get('email');
+        allStudents[index].phone = data.get('phone');
+        allStudents[index].course = editedCorse;
+
+        setAllStudents([...allStudents]);
+
         setAlertType('success');
         setAlertMsg('Student Data Updated Successfully');
         alertShow({ vertical: 'top', horizontal: 'right' });
@@ -118,9 +125,9 @@ export default function BasicTable() {
 
     deleteDocument(id, 'students')
       .then((res) => {
-        allStudents.splice(index, 1)
-        setAllStudents([...allStudents])
-        setDeleteDialogOpen(false)
+        allStudents.splice(index, 1);
+        setAllStudents([...allStudents]);
+        setDeleteDialogOpen(false);
 
         loaderClose();
 
