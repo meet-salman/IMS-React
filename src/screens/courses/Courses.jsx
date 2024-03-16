@@ -13,7 +13,7 @@ const Courses = () => {
         getAllData('Courses')
             .then((res) => {
                 setAllCourses(res)
-                console.log(res);
+                // console.log(res);
             })
             .catch((rej) => {
                 console.log(rej);
