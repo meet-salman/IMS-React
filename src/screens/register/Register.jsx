@@ -1,6 +1,8 @@
-import * as React from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUpUser } from '../../config/firebase/FirebaseMethods';
+import axios from 'axios';
+import UserContext from '../../context/UserContext';
+
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Container, Grid, Button, Typography, CssBaseline, Avatar, Snackbar, Alert, Backdrop, CircularProgress, TextField, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
@@ -10,20 +12,22 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
 
+  const { setIsUser, setCurrentUser, setCurrentToken } = useContext(UserContext);
+
   const date = new Date();
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('en-PK', options);
 
-  const [course, setCourse] = React.useState('');
+  const [course, setCourse] = useState('');
 
-  const [loader, setLoderOpen] = React.useState(false);
-  const [alert, setAlertOpen] = React.useState({
+  const [loader, setLoderOpen] = useState(false);
+  const [alert, setAlertOpen] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
   });
-  const [alertType, setAlertType] = React.useState();
-  const [alertMsg, setAlertMsg] = React.useState();
+  const [alertType, setAlertType] = useState();
+  const [alertMsg, setAlertMsg] = useState();
 
   const { vertical, horizontal, open } = alert;
 
@@ -45,8 +49,9 @@ export default function SignUp() {
   };
 
   //   Alert Show & Close Function
-  const alertShow = (newState) => {
-    setAlertOpen({ ...newState, open: true });
+  const alertShow = () => {
+    setAlertOpen({ vertical: 'top', horizontal: 'right', open: true });
+
   };
   const alertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -56,43 +61,67 @@ export default function SignUp() {
   };
 
 
-  // Setting Course Name
-  const handleChange = (event) => {
-    setCourse(event.target.value);
-  };
-
   // User Register Function
   const UserRegister = (event) => {
     event.preventDefault();
-    loaderShow()
+    loaderShow();
     const data = new FormData(event.currentTarget);
 
-    // User Register to Firebase
-    signUpUser({
-      name: data.get('name'),
-      email: data.get('email'),
-      phone: data.get('phone'),
+    // Register Using API
+    axios.post('http://localhost:3001/api/v1/students/register', {
+      fullName: data.get('name'),
       age: data.get('age'),
+      email: data.get('email'),
+      contactNo: data.get('phone'),
       course: course,
-      password: data.get('password'),
       enrollDate: formattedDate,
-      type: 'student'
+      password: data.get('password')
     })
       .then((res) => {
-        loaderClose();
 
-        setAlertType('success');
-        setAlertMsg('SignUp Successfully');
-        alertShow({ vertical: 'top', horizontal: 'right' });
-        navigate('/')
+        // Login After Register Using API
+        axios.put('http://localhost:3001/api/v1/students/login', {
+          email: data.get('email'),
+          password: data.get('password')
+        })
+          .then((res) => {
+            loaderClose();
+            console.log(res.data.student);
+
+            let tokens = res.data.student.tokens;
+            setCurrentToken(tokens[tokens.length - 1]);
+
+            const token = JSON.stringify(tokens[tokens.length - 1]);
+            localStorage.setItem('token', token);
+
+            const user = JSON.stringify(res.data.student);
+            localStorage.setItem('user', user);
+
+            setIsUser(true);
+            setCurrentUser(res.data.student);
+
+            setAlertType('success');
+            setAlertMsg('SignUp Successfully!');
+            alertShow();
+
+            navigate('/profile')
+          })
+          .catch((rej) => {
+            console.log(rej);
+            loaderClose();
+
+            setAlertType('error');
+            setAlertMsg(`${rej}`);
+            alertShow();
+          })
+
       })
       .catch((rej) => {
-        console.log(rej);
         loaderClose();
 
         setAlertType('error');
-        setAlertMsg(`${rej}`);
-        alertShow({ vertical: 'top', horizontal: 'right' });
+        setAlertMsg(`${rej.response.data.message}`);
+        alertShow();
       })
 
   };
@@ -119,10 +148,6 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField fullWidth name="name" required label="Full Name" autoFocus />
               </Grid>
-
-              {/* <Grid item xs={12} sm={6}>
-                <TextField label="Last Name" fullWidth name="lastName" autoComplete="family-name" />
-              </Grid> */}
 
               <Grid item xs={12} sm={6}>
                 <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />

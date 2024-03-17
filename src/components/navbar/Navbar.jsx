@@ -1,31 +1,33 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserData, signOutUser } from '../../config/firebase/FirebaseMethods';
-import { Avatar } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import axios from 'axios';
 import userContext from '../../context/UserContext'
+
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Box, Container, AppBar, Button, Typography, Toolbar, Tooltip, Avatar, Backdrop, Snackbar, Alert, CircularProgress, Menu, MenuItem, IconButton } from '@mui/material';
 
 
 const pages = ['home', 'courses'];
 let settings = [];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const { isUser, setIsUser } = React.useContext(userContext);
-  const [userData, setUserData] = React.useState();
+  const { isUser, setIsUser, currentUser, setCurrentUser, currentToken, setCurrentToken } = useContext(userContext);
+
+  const [loader, setLoderOpen] = useState(false);
+  const [alert, setAlertOpen] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const [alertType, setAlertType] = useState();
+  const [alertMsg, setAlertMsg] = useState();
+
+  const { vertical, horizontal, open } = alert;
+
 
   // UseNavigate
   const navigate = useNavigate()
@@ -40,22 +42,39 @@ function ResponsiveAppBar() {
     navigate('/login')
   }
 
+  // UseEffect to set Nav Items
+  useEffect(() => {
 
-  // UseEffect to get User Data
-  React.useEffect(() => {
+    if (isUser) {
+      if (currentUser.type === 'admin') {
+        settings = ['Dashboard', 'Logout'];
+      }
+      else {
+        settings = ['Profile', 'Logout'];
+      }
+    }
 
-    getUserData()
-      .then((res) => {
-        setUserData(res)
+  }, [isUser]);
 
-        res.type === 'admin' ? settings = ['Dashboard', 'Logout'] : settings = ['Profile', 'Logout']
 
-      })
-      .catch((rej) => {
-        console.log(rej);
-      })
+  // BackDrop Open & CLose Function
+  const loaderShow = () => {
+    setLoderOpen(true);
+  };
+  const loaderClose = () => {
+    setLoderOpen(false);
+  };
 
-  }, [userData])
+  // Alert Show & Close Function
+  const alertShow = () => {
+    setAlertOpen({ vertical: 'top', horizontal: 'right', open: true });
+  };
+  const alertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertOpen({ ...alert, open: false });
+  };
 
 
   // Handle NavBar Menues
@@ -80,154 +99,198 @@ function ResponsiveAppBar() {
     } else if (setting === 'Profile') {
       navigate('/profile')
     } else if (setting === 'Logout') {
-      signOutUser()
-      setIsUser(false)
-      setCurrentUser()
+
+      loaderShow();
+
+      // Logged Out Using API
+      axios('http://localhost:3001/api/v1/students/logout', {
+        method: 'put',
+        headers: {
+          Authorization: `Bearer ${currentToken}`
+        }
+      })
+        .then((res) => {
+          loaderClose();
+          setAlertType('success');
+          setAlertMsg(res.data.message);
+          alertShow();
+
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+
+          setIsUser(false);
+          setCurrentUser();
+          setCurrentToken();
+
+          navigateToLogin();
+        })
+        .catch((rej) => {
+          loaderClose();
+          setAlertType('error');
+          setAlertMsg(rej.message);
+          alertShow();
+        })
+
     }
 
 
   };
 
   return (
-    <AppBar position="static">
+    <Box>
+      <AppBar position="static">
 
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
 
-          {/* Logo */}
-          <Typography
-            variant="h6"
-            noWrap
-            href="/"
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            SkillPoint
-          </Typography>
-
-          {/* Hamburger Menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+            {/* Logo */}
+            <Typography
+              variant="h6"
+              noWrap
+              href="/"
+              component="a"
               sx={{
-                display: { xs: 'block', md: 'none' },
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              SkillPoint
+            </Typography>
 
-          {/* Responsive Logo */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            SkillPoint
-          </Typography>
+            {/* Hamburger Menu */}
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 
-          {/* Nav Menue */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => handleCloseNavMenu(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
               >
-                {page}
-              </Button>
-            ))}
-          </Box>
+                <MenuIcon />
+              </IconButton>
 
-
-          {/* User Menue */}
-          {isUser
-            ?
-            < Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
-                  <AccountCircleIcon fontSize='large' sx={{color:'#ffff'}}/>
-                </IconButton>
-              </Tooltip>
               <Menu
-
-                sx={{ mt: '45px' }}
                 id="menu-appbar"
-                anchorEl={anchorElUser}
+                anchorEl={anchorElNav}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: 'bottom',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {pages.map((page) => (
+                  <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                    <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
             </Box>
 
-            :
-            <Box>
-              <Button color="inherit" onClick={navigateToLogin}>Login</Button>
-              <Button color="inherit" onClick={navigateToSignUp}>Register</Button>
-            </Box>
-          }
+            {/* Responsive Logo */}
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              SkillPoint
+            </Typography>
 
-        </Toolbar>
-      </Container>
-    </AppBar >
+            {/* Nav Menue */}
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => handleCloseNavMenu(page)}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
+
+
+            {/* User Menue */}
+            {isUser
+              ?
+              < Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                    <AccountCircleIcon fontSize='large' sx={{ color: '#ffff' }} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+
+              :
+              <Box>
+                <Button color="inherit" onClick={navigateToLogin}>Login</Button>
+                <Button color="inherit" onClick={navigateToSignUp}>Register</Button>
+              </Box>
+            }
+
+          </Toolbar>
+        </Container>
+      </AppBar >
+
+
+
+
+      {/* Backdrop */}
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}  >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      {/* Alert */}
+      <Snackbar open={open} autoHideDuration={2000} onClose={alertClose} anchorOrigin={{ vertical, horizontal }} key={vertical + horizontal} >
+        <Alert severity={alertType} variant="filled" sx={{ width: '100%' }} > {alertMsg} </Alert>
+      </Snackbar>
+    </Box>
   );
 }
 export default ResponsiveAppBar;

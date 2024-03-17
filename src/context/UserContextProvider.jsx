@@ -1,55 +1,68 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserContext from './UserContext'
-import { getAllData, getUserData, userExist } from '../config/firebase/FirebaseMethods';
+import axios from 'axios';
 
 const UserContextProvider = ({ children }) => {
 
     const [isUser, setIsUser] = useState(false);
     const [currentUser, setCurrentUser] = useState();
+    const [currentToken, setCurrentToken] = useState();
     const [allStudents, setAllStudents] = useState();
 
-    // UseEffect to set Global States
+    // // UseEffect to set Global States
     useEffect(() => {
 
-        // Checking User LoggenIn or Not
-        userExist()
-            .then((res) => {
-                setIsUser(true)
+        // Getting Logged In User Token
+        const token = JSON.parse(localStorage.getItem('token'));
+        setCurrentToken(token);
 
-                // Getting User Data From Firebase
-                getUserData()
-                    .then((res) => {
-                        setCurrentUser(res)
-                    })
-                    .catch((rej) => {
-                        // console.log(rej);
-                        setIsUser(false)
-                    })
-            })
-            .catch((rej) => {
-                // User Not LoggedIn
-            })
+        // Getting Logged In User
+        const user = JSON.parse(localStorage.getItem('user'));
+        setCurrentUser(user);
 
-        // Getting Students Data
-        getAllData('students')
-            .then((res) => {
-                let arr = [];
-                res.map((item) => {
-                    if (item.type === 'student') {
-                        arr.push(item)
+        // Check isToken to Get Students Data For Admin 
+        if (token) {
+            setIsUser(true);
+
+            // Getting Students Data if Admin Login
+            if (user.type === 'admin') {
+
+                // Fetch Data Using API
+                axios('http://localhost:3001/api/v1/students', {
+                    method: 'get',
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
                 })
-                setAllStudents(arr)
-            })
-            .catch((rej) => {
-                console.log(rej);
-            })
+                    .then((res) => {
+                        console.log(res.data.students);
+                        let data = res.data.students;
+                        let arr = [];
 
-    }, [])
+                        data.map(item => {
+                            if (item.type === 'student') {
+                                arr.push(item);
+                            }
+                        })
+                        setAllStudents(arr);
+                    })
+                    .catch((rej) => {
+                        console.log(rej);
+                    })
+            }
+
+        }
+        else {
+            setIsUser(false);
+            setCurrentToken();
+            setCurrentUser();
+        }
+
+    }, [currentToken]);
 
     return (
         <>
-            <UserContext.Provider value={{ isUser, setIsUser, currentUser, setCurrentUser, allStudents, setAllStudents }}>
+            <UserContext.Provider value={{ isUser, setIsUser, currentUser, setCurrentUser, currentToken, setCurrentToken, allStudents, setAllStudents }}>
                 {children}
             </UserContext.Provider>
         </>

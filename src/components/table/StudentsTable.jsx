@@ -1,37 +1,33 @@
-import * as React from 'react';
-import { Box, Grid, Button, TextField, Paper, Alert, Snackbar, Backdrop, CircularProgress, Table, TableContainer, TableRow, TableHead, TableBody, TableCell, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { useContext, useState } from 'react';
 import UserContext from '../../context/UserContext'
-import { updateDocument, deleteDocument } from '../../config/firebase/FirebaseMethods';
+import axios from 'axios';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { Box, Grid, Button, TextField, Paper, Alert, Snackbar, Backdrop, CircularProgress, Table, TableContainer, TableRow, TableHead, TableBody, TableCell, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
 
 export default function BasicTable() {
 
-  const { allStudents, setAllStudents } = React.useContext(UserContext);
-  const [dialogOpen, setDeleteDialogOpen] = React.useState(false);
-  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
-  const [loader, setLoderOpen] = React.useState(false);
-  const [alert, setAlertOpen] = React.useState({
+  const { allStudents, setAllStudents, currentToken } = useContext(UserContext);
+
+  const [dialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [loader, setLoderOpen] = useState(false);
+  const [alert, setAlertOpen] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
   });
-  const [alertType, setAlertType] = React.useState();
-  const [alertMsg, setAlertMsg] = React.useState();
+  const [alertType, setAlertType] = useState();
+  const [alertMsg, setAlertMsg] = useState();
   const { vertical, horizontal, open } = alert;
 
-  const [id, setId] = React.useState();
-  const [index, setIndex] = React.useState();
+  const [id, setId] = useState();
+  const [index, setIndex] = useState();
 
-  const [editedEmail, setEditedEmail] = React.useState('');
-  const [editedName, setEditedName] = React.useState('');
-  const [editedPhone, setEditedPhone] = React.useState('');
-  const [editedCorse, setEditedCourse] = React.useState('');
+  const [editedEmail, setEditedEmail] = useState('');
+  const [editedName, setEditedName] = useState('');
+  const [editedPhone, setEditedPhone] = useState('');
+  const [editedCorse, setEditedCourse] = useState('');
 
 
 
@@ -60,9 +56,9 @@ export default function BasicTable() {
   // Opening Edit Dialog Box & Setting Values
   const editStudentDialog = (id, index) => {
 
-    setEditedName(allStudents[index].name);
+    setEditedName(allStudents[index].fullName);
     setEditedEmail(allStudents[index].email);
-    setEditedPhone(allStudents[index].phone);
+    setEditedPhone(allStudents[index].contactNo);
     setEditedCourse(allStudents[index].course);
 
     setEditDialogOpen(true);
@@ -79,18 +75,18 @@ export default function BasicTable() {
 
     const data = new FormData(event.currentTarget);
 
-    updateDocument({
-      name: data.get('name'),
-      email: data.get('email'),
-      phone: data.get('phone'),
-      course: editedCorse,
-    }, id, 'students')
+    axios(`http://localhost:3001/api/v1/students/${id}`, {
+      method: 'put',
+      headers: {
+        Authorization: `Bearer ${currentToken}`
+      }
+    })
       .then((res) => {
         loaderClose();
 
-        allStudents[index].name = data.get('name');
+        allStudents[index].fullName = data.get('name');
         allStudents[index].email = data.get('email');
-        allStudents[index].phone = data.get('phone');
+        allStudents[index].contactNo = data.get('phone');
         allStudents[index].course = editedCorse;
 
         setAllStudents([...allStudents]);
@@ -104,10 +100,11 @@ export default function BasicTable() {
         loaderClose();
 
         setAlertType('error');
-        setAlertMsg(`${rej}`);
+        setAlertMsg(rej.message);
         alertShow({ vertical: 'top', horizontal: 'right' });
       })
-  }
+
+  };
 
 
 
@@ -123,7 +120,12 @@ export default function BasicTable() {
   const DeleteUser = () => {
     loaderShow();
 
-    deleteDocument(id, 'students')
+    axios(`http://localhost:3001/api/v1/students/${id}`, {
+      method: 'delete',
+      headers: {
+        Authorization: `Bearer ${currentToken}`
+      }
+    })
       .then((res) => {
         allStudents.splice(index, 1);
         setAllStudents([...allStudents]);
@@ -139,9 +141,10 @@ export default function BasicTable() {
         loaderClose();
 
         setAlertType('error');
-        setAlertMsg(rej);
+        setAlertMsg(rej.response.data.message);
         alertShow({ vertical: 'top', horizontal: 'right' });
       })
+
 
   }
 
@@ -180,15 +183,15 @@ export default function BasicTable() {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
 
-                    <TableCell width={250}> {student.name} </TableCell>
+                    <TableCell width={250}> {student.fullName} </TableCell>
                     <TableCell width={300}>{student.email}</TableCell>
-                    <TableCell width={200}>{student.phone}</TableCell>
+                    <TableCell width={200}>{student.contactNo}</TableCell>
                     <TableCell width={300}>{student.course}</TableCell>
                     <TableCell>{student.enrollDate}</TableCell>
                     <TableCell align="right">
                       <Box>
-                        <Button size="small" onClick={() => editStudentDialog(student.documentId, index)}> Edit </Button>
-                        <Button size="small" onClick={() => deleteStudentDialog(student.documentId, index)}> Delete </Button>
+                        <Button size="small" onClick={() => editStudentDialog(student._id, index)}> Edit </Button>
+                        <Button size="small" onClick={() => deleteStudentDialog(student._id, index)}> Delete </Button>
                       </Box>
                     </TableCell>
 
@@ -206,7 +209,8 @@ export default function BasicTable() {
 
         </TableContainer>
 
-        : <Box sx={{ display: 'flex', justifyContent: 'center' }}   > <CircularProgress /> </Box>}
+        : <Box sx={{ display: 'flex', justifyContent: 'center' }}   > <CircularProgress /> </Box>
+      }
 
 
 

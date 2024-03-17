@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import CourseCard from '../card/CourseCard';
 import StudentsTable from '../table/StudentsTable';
 import CourseForm from '../courseForm/CourseForm';
-import { getAllData } from '../../config/firebase/FirebaseMethods';
 import { useEffect } from 'react';
 
 function CustomTabPanel(props) {
@@ -52,17 +51,17 @@ export default function BasicTabs() {
         setValue(newValue);
     };
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        getAllData('Courses')
-            .then((res) => {
-                setAllCourses(res)
-            })
-            .catch((rej) => {
-                console.log(rej);
-            })
+    //     getAllData('Courses')
+    //         .then((res) => {
+    //             setAllCourses(res)
+    //         })
+    //         .catch((rej) => {
+    //             console.log(rej);
+    //         })
 
-    }, [])
+    // }, [])
 
 
 

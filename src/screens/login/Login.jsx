@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,24 +13,24 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Backdrop, CircularProgress, Snackbar } from '@mui/material';
-import { loginUser } from '../../config/firebase/FirebaseMethods';
 import UserContext from '../../context/UserContext';
+import axios from 'axios';
 
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
 
-  const { isUser, setIsUser } = React.useContext(UserContext)
+  const { setIsUser, setCurrentUser, setCurrentToken } = useContext(UserContext);
 
-  const [loader, setLoderOpen] = React.useState(false);
-  const [alert, setAlertOpen] = React.useState({
+  const [loader, setLoderOpen] = useState(false);
+  const [alert, setAlertOpen] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
   });
-  const [alertType, setAlertType] = React.useState();
-  const [alertMsg, setAlertMsg] = React.useState();
+  const [alertType, setAlertType] = useState();
+  const [alertMsg, setAlertMsg] = useState();
 
   const { vertical, horizontal, open } = alert;
 
@@ -52,8 +52,8 @@ export default function SignIn() {
   };
 
   // Alert Show & Close Function
-  const alertShow = (newState) => {
-    setAlertOpen({ ...newState, open: true });
+  const alertShow = () => {
+    setAlertOpen({ vertical: 'top', horizontal: 'right', open: true });
   };
   const alertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -69,20 +69,31 @@ export default function SignIn() {
     loaderShow();
     const data = new FormData(event.currentTarget);
 
-    // Login User From Firebase
-    loginUser({
+    // Login Using API
+    axios.put('http://localhost:3001/api/v1/students/login', {
       email: data.get('email'),
       password: data.get('password')
     })
       .then((res) => {
-        console.log(res);
         loaderClose();
+        console.log(res.data.student);
+
+        let tokens = res.data.student.tokens;
+        setCurrentToken(tokens[tokens.length - 1]);
+
+        const token = JSON.stringify(tokens[tokens.length - 1]);
+        localStorage.setItem('token', token);
+
+        const user = JSON.stringify(res.data.student);
+        localStorage.setItem('user', user);
 
         setIsUser(true);
+        setCurrentUser(res.data.student);
+
+        alertShow();
         setAlertType('success');
-        setAlertMsg('Login Successfully');
-        alertShow({ vertical: 'top', horizontal: 'right' });
-        navigate('/');
+        setAlertMsg(`${res.data.message}`);
+        navigate('/profile')
       })
       .catch((rej) => {
         console.log(rej);
@@ -90,8 +101,9 @@ export default function SignIn() {
 
         setAlertType('error');
         setAlertMsg(`${rej}`);
-        alertShow({ vertical: 'top', horizontal: 'right' });
+        alertShow();
       })
+
   };
 
 

@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
-import { getAllData } from '../../config/firebase/FirebaseMethods'
 import CourseCard from '../../components/card/CourseCard'
 
 const Courses = () => {
@@ -8,18 +7,18 @@ const Courses = () => {
     const [allCourses, setAllCourses] = React.useState([])
 
     // UseEffect to getting all Courses
-    useEffect(() => {
+    // useEffect(() => {
 
-        getAllData('Courses')
-            .then((res) => {
-                setAllCourses(res)
-                // console.log(res);
-            })
-            .catch((rej) => {
-                console.log(rej);
-            })
+    //     getAllData('Courses')
+    //         .then((res) => {
+    //             setAllCourses(res)
+    //             console.log(res);
+    //         })
+    //         .catch((rej) => {
+    //             console.log(rej);
+    //         })
 
-    }, [])
+    // }, [])
 
     return (
         <>
