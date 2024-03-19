@@ -6,7 +6,7 @@ Welcome to the Institute Management System (IMS) repository! This project aims t
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](./Snaps/Home.png)
+(/Snaps/Home.png)
 
 The Institute Management System (IMS) is a comprehensive solution designed to streamline administrative tasks and enhance student experience within educational institutes. With a user-friendly interface and robust features, IMS facilitates student registration, course management, and administrative operations. Leveraging modern technologies such as React, NodeJS, ExpressJS, MongoDB, and Firebase, IMS aims to simplify institute management while providing a seamless experience for both students and administrators.
 
@@ -69,34 +69,34 @@ To get a local copy up and running follow these simple steps.
 <!-- INSTALLATION -->
 ### Installation
 
-* Clone the repo:
+1. Clone the repo:
    ```sh
    git clone https://github.com/meet-salman/IMS-React.git
    ```
 
 #### Backend
 
-1. Install NPM packages:
+2. Install NPM packages:
    ```sh
    npm install
    ```
-2. Enter your Credentials in `.env`
+3. Enter your Credentials in `.env`
    ```js
    JWT_SECRET = 'YOUR JWT SECRET';
    MONGO_URI = 'YOUR MONGODB URI';
    ```
-3. Start Server on Localhost:
+4. Start Server on Localhost:
    ```sh
    npm run dev
    ```
 
    #### Frontend
 
-1. Install NPM packages:
+5. Install NPM packages:
    ```sh
    npm install
    ```
-2. Enter your Firebase Configration in `.env`
+6. Enter your Firebase Configration in `.env`
    ```js
    VITE_APIKEY = 'API KEY';
    VITE_AUTHDOMAIN = 'AUTH DOMAIN';
@@ -106,7 +106,7 @@ To get a local copy up and running follow these simple steps.
    VITE_APPID = 'APP ID';
    VITE_MEASUREMENTID = 'MEASUREMENT ID';
    ```
-3. Start Server on Localhost:
+7. Start Server on Localhost:
    ```sh
    npm run dev
    ```
