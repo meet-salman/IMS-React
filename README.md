@@ -1,12 +1,12 @@
 # Institute Management System
 
+<img align="center" src="/Snaps//Home.png" />
+
 Welcome to the Institute Management System (IMS) repository! This project aims to provide a comprehensive management system for educational institutes, facilitating both students and administrators.
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-<img align="center" src="/Snaps//Home.png" />
 
 The Institute Management System (IMS) is a comprehensive solution designed to streamline administrative tasks and enhance student experience within educational institutes. With a user-friendly interface and robust features, IMS facilitates student registration, course management, and administrative operations. Leveraging modern technologies such as React, NodeJS, ExpressJS, MongoDB, and Firebase, IMS aims to simplify institute management while providing a seamless experience for both students and administrators.
 
