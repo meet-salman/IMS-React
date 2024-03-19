@@ -1,5 +1,8 @@
 <a name="readme-top"></a>
 
+* [![Next][Next.js]][Next-url]
+
+
 # Institute Management System
 
 <img align="center" src="/Snaps//Home.png" />
