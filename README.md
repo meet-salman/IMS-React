@@ -90,7 +90,7 @@ To get a local copy up and running follow these simple steps.
    npm run dev
    ```
 
-   #### Frontend
+#### Frontend
 
 5. Install NPM packages:
    ```sh
