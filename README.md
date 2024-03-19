@@ -20,14 +20,14 @@ The Institute Management System (IMS) is a comprehensive solution designed to st
 The backend of the Institute Management System (IMS) is powered by NodeJS and ExpressJS, providing a robust and efficient server-side architecture. MongoDB is used as the database to store and manage data securely. JWT authentication ensures secure access to API endpoints, enhancing the overall security of the system.
 
 
-##### For Students
+###### For Students
 * Student Register API: Allows students to register for an account.
 * Student Login API: Enables students to log in securely.
 * JWT Authentication: Implements token-based authorization for secure access.
 * Password Hashing: Utilizes BcryptJS library to hash passwords for enhanced security.
 * Logout API: Provides a mechanism for students to log out securely.
 
-##### For Admin
+###### For Admin
 * Login API: Allows administrators to log in to the system.
 * Protected APIs: Grants access to privileged actions, including:
    - Update & Delete Students Data from Database.
@@ -38,17 +38,16 @@ The backend of the Institute Management System (IMS) is powered by NodeJS and Ex
 <!-- FRONTEND -->
 #### Frontend
 
-* Material UI: Utilizes Material UI for a modern and intuitive user interface.
-* Register & Login Page: Provides easy-to-use interfaces for registration and login.
-* Public Route for Courses: Allows everyone to explore available courses offered by the institute.
+IMS utilizes Material UI for a modern UI, providing easy registration and login interfaces. A public route allows all users to explore available courses effortlessly.
 
-##### For Students
+
+###### For Students
 * Profile Page: Upon login, students are redirected to their profile page, featuring tabs for:
 * Profile: Allows students to edit their information.
 * Security: Enables students to change their password.
 * Courses: Displays enrolled courses for the student.
 
-##### For Admin
+###### For Admin
 * Dashboard Page: After login, administrators are redirected to the protected dashboard, which includes tabs for:
 * Students: Provides a list of all students, allowing administrators to edit and delete their information.
 * Courses: Lists all courses with options for editing and deletion.
@@ -61,6 +60,7 @@ The backend of the Institute Management System (IMS) is powered by NodeJS and Ex
 * Image Storage: Utilizes Firebase for storage to save images, enhancing the system's capabilities to handle and display images efficiently.
 
 
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -69,14 +69,14 @@ To get a local copy up and running follow these simple steps.
 <!-- INSTALLATION -->
 ### Installation
 
-* Clone the repo
+* Clone the repo:
    ```sh
    git clone https://github.com/meet-salman/IMS-React.git
    ```
 
 #### Backend
 
-1. Install NPM packages
+1. Install NPM packages:
    ```sh
    npm install
    ```
@@ -85,14 +85,14 @@ To get a local copy up and running follow these simple steps.
    JWT_SECRET = 'YOUR JWT SECRET';
    MONGO_URI = 'YOUR MONGODB URI';
    ```
-3. Start Server on Localhost
+3. Start Server on Localhost:
    ```sh
    npm run dev
    ```
 
    #### Frontend
 
-   1. Install NPM packages
+1. Install NPM packages:
    ```sh
    npm install
    ```
@@ -106,7 +106,7 @@ To get a local copy up and running follow these simple steps.
    VITE_APPID = 'APP ID';
    VITE_MEASUREMENTID = 'MEASUREMENT ID';
    ```
-3. Start Server on Localhost
+3. Start Server on Localhost:
    ```sh
    npm run dev
    ```
