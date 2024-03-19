@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 
-* [![Node][Node.js]][https://nodejs.org/en]
+* [![Next][Node.js]][nodejs.org]
 
 
 # Institute Management System
