@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 
-* [![Next][Next.js]][Next-url]
+* [https://nodejs.org/en]
 
 
 # Institute Management System
