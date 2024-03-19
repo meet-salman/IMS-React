@@ -122,3 +122,5 @@ Feel free to explore the repository and contribute to make IMS even better! If y
 ## Contact
 
 Salman Ahmed - [@Linkedin](https://www.linkedin.com/in/salman-ahmed-538897291/) - say2salmanahmed@gmail.com
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
